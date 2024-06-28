@@ -10,8 +10,14 @@ fi
 YML_FILE=$1
 NEW_WG_HOST_VALUE=$2
 
-# Use sed to update the WG_HOST value
-sed -i.bak -E "s/(WG_HOST: ).*/\1$NEW_WG_HOST_VALUE/" $YML_FILE
+# Check if the file exists
+if [ ! -f "$YML_FILE" ]; then
+    echo "File not found: $YML_FILE"
+    exit 1
+fi
+
+# Use sed to uncomment and update the WG_HOST value
+sed -i.bak -E "s/#?([[:space:]]*-[[:space:]]*WG_HOST=).*/\1$NEW_WG_HOST_VALUE/" "$YML_FILE"
 
 # Check if sed command was successful
 if [ $? -eq 0 ]; then
